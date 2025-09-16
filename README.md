@@ -347,6 +347,14 @@ def predict_income():
 - **[Business Case](docs/business_case.md)**: ROI analysis and justification
 - **[Implementation Guide](docs/implementation.md)**: Deployment instructions
 
+## 📚 Documentation
+
+### Additional Resources
+- **[Methodology Documentation](docs/methodology.md)**: Detailed technical approach
+- **[Findings Summary](docs/findings.md)**: Key insights and discoveries
+- **[Business Case](docs/business_case.md)**: ROI analysis and justification
+- **[Implementation Guide](docs/implementation.md)**: Deployment instructions
+
 ### Academic References
 - Singh, R. et al. (2023). "Artisan Economics in Traditional Craft Clusters"
 - Kumar, A. (2022). "Geographic Indications and Rural Development"
