@@ -407,14 +407,14 @@ flake8 src/
 ## 📞 Contact & Support
 
 ### Project Maintainer
-- **Author**: [Your Name]
-- **Email**: [your.email@example.com]
-- **LinkedIn**: [Your LinkedIn Profile]
-- **GitHub**: [Your GitHub Profile]
+- **Author**: [ASHWINI]
+- **Email**: [ashwiniambastha@gmail.com]
+- **LinkedIn**: [https://www.linkedin.com/in/ashwiniambastha/]
+- **GitHub**: [[Your GitHub Profile](https://github.com/ashwiniambastha)]
 
 ### Project Links
-- **GitHub Repository**: [Repository URL]
-- **Live Demo**: [Demo URL if available]
+- **GitHub Repository**: [[Repository URL](https://github.com/ashwiniambastha/Varanasi-GI-Toy-Cluster-Sustainability-Survey)]
+- **Live Demo**: [https://github.com/ashwiniambastha/Varanasi-GI-Toy-Cluster-Sustainability-Survey/blob/main/Main%20Collab.ipynb]
 - **Documentation**: [Docs URL]
 - **Issues/Bugs**: [Issues URL]
 
