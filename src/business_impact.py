@@ -11,6 +11,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
 from scipy import stats
+from scipy.stats import ttest_ind
 import warnings
 warnings.filterwarnings('ignore')
 
@@ -51,7 +52,7 @@ def calculate_training_impact(df):
         satisfaction_difference = trained_satisfaction - untrained_satisfaction
     
     # Statistical significance test
-    t_stat, p_value = stats.ttest_ind(
+    t_stat, p_value = ttest_ind(
         trained['Monthly_Income'].dropna(),
         untrained['Monthly_Income'].dropna()
     )
@@ -126,7 +127,7 @@ def calculate_gi_registration_impact(df):
         satisfaction_difference = gi_satisfaction - non_gi_satisfaction
     
     # Statistical significance test
-    t_stat, p_value = stats.ttest_ind(
+    t_stat, p_value = ttest_ind(
         gi_beneficiaries['Monthly_Income'].dropna(),
         non_beneficiaries['Monthly_Income'].dropna()
     )
