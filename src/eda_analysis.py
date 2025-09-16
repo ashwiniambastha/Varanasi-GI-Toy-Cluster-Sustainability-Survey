@@ -11,6 +11,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
 from scipy import stats
+from scipy.stats import ttest_ind
 import warnings
 warnings.filterwarnings('ignore')
 
@@ -126,7 +127,7 @@ def perform_bivariate_analysis(df):
         female_income = df[df['Primary_Earner_Gender'] == 'Female']['Monthly_Income'].dropna()
         
         if len(male_income) > 0 and len(female_income) > 0:
-            t_stat, p_value = stats.ttest_ind(male_income, female_income)
+            t_stat, p_value = ttest_ind(male_income, female_income)
             results['gender_ttest'] = {'t_statistic': t_stat, 'p_value': p_value}
             
             significance = "Significant" if p_value < 0.05 else "Not significant"
@@ -261,26 +262,32 @@ def create_eda_visualizations(df, output_dir='visualizations'):
     
     # 2. Income vs Family Size scatter
     if all(col in df.columns for col in ['Monthly_Income', 'Family_Size']):
-        axes[0,1].scatter(df['Family_Size'], df['Monthly_Income'], alpha=0.6, color='coral')
-        # Add trend line
-        z = np.polyfit(df['Family_Size'].fillna(df['Family_Size'].mean()), 
-                      df['Monthly_Income'].fillna(df['Monthly_Income'].mean()), 1)
-        p = np.poly1d(z)
-        axes[0,1].plot(df['Family_Size'].fillna(df['Family_Size'].mean()), 
-                      p(df['Family_Size'].fillna(df['Family_Size'].mean())), "r--", alpha=0.8)
-        axes[0,1].set_title('Income vs Family Size')
-        axes[0,1].set_xlabel('Family Size')
-        axes[0,1].set_ylabel('Monthly Income (₹)')
+        # Clean data for plotting
+        clean_data = df[['Monthly_Income', 'Family_Size']].dropna()
+        if len(clean_data) > 1:
+            axes[0,1].scatter(clean_data['Family_Size'], clean_data['Monthly_Income'], alpha=0.6, color='coral')
+            # Add trend line
+            try:
+                z = np.polyfit(clean_data['Family_Size'], clean_data['Monthly_Income'], 1)
+                p = np.poly1d(z)
+                axes[0,1].plot(clean_data['Family_Size'], p(clean_data['Family_Size']), "r--", alpha=0.8)
+            except:
+                pass  # Skip trend line if it fails
+            axes[0,1].set_title('Income vs Family Size')
+            axes[0,1].set_xlabel('Family Size')
+            axes[0,1].set_ylabel('Monthly Income (₹)')
     
     # 3. Training access vs Income boxplot
     if all(col in df.columns for col in ['Monthly_Income', 'Training_Access']):
         training_labels = {0: 'No Training', 1: 'Has Training'}
         df_plot = df.copy()
         df_plot['Training_Label'] = df_plot['Training_Access'].map(training_labels)
+        df_plot = df_plot.dropna(subset=['Training_Label', 'Monthly_Income'])  # Clean data
         
-        sns.boxplot(data=df_plot, x='Training_Label', y='Monthly_Income', ax=axes[0,2])
-        axes[0,2].set_title('Income by Training Access')
-        axes[0,2].set_ylabel('Monthly Income (₹)')
+        if len(df_plot) > 0:
+            sns.boxplot(data=df_plot, x='Training_Label', y='Monthly_Income', ax=axes[0,2])
+            axes[0,2].set_title('Income by Training Access')
+            axes[0,2].set_ylabel('Monthly Income (₹)')
     
     # 4. Gender distribution pie chart
     if 'Primary_Earner_Gender' in df.columns:
@@ -294,10 +301,12 @@ def create_eda_visualizations(df, output_dir='visualizations'):
         gi_labels = {0: 'Non-Beneficiary', 1: 'GI Beneficiary'}
         df_plot = df.copy()
         df_plot['GI_Label'] = df_plot['Is_GI_Beneficiary'].map(gi_labels)
+        df_plot = df_plot.dropna(subset=['GI_Label', 'Satisfaction_Score'])  # Clean data
         
-        sns.boxplot(data=df_plot, x='GI_Label', y='Satisfaction_Score', ax=axes[1,1])
-        axes[1,1].set_title('Satisfaction by GI Beneficiary Status')
-        axes[1,1].set_ylabel('Satisfaction Score')
+        if len(df_plot) > 0:
+            sns.boxplot(data=df_plot, x='GI_Label', y='Satisfaction_Score', ax=axes[1,1])
+            axes[1,1].set_title('Satisfaction by GI Beneficiary Status')
+            axes[1,1].set_ylabel('Satisfaction Score')
     
     # 6. Correlation heatmap
     numerical_cols = df.select_dtypes(include=[np.number]).columns
